@@ -5,18 +5,27 @@ import Preview from '../Components/Preview/Preview';
 import { createBrowserRouter } from 'react-router-dom';
 
 let Routes= createBrowserRouter([
+    // {
+    //     path :"/register",
+    //     element: <Register/>
+    // },
+    // {
+    //     path :"/",
+    //     element: <Login/>
+    // },
+    // {
+    //     path :"/preview",
+    //     element: <Preview/>
+    // }
     {
-        path :"/",
-        element: <Login/>
-    },
-    {
-        path :"/register",
-        element: <Register/>
-    },
-    {
-        path :"/preview",
-        element: <Preview/>
-    }
+    path :"/register",
+    element: <Register/> 
+   },
+   {
+    path :"/",
+    element: <Login/>
+   }      
+    
 
 ])
 

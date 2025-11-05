@@ -1,8 +1,13 @@
-
-
+import axios from 'axios';
+import services from '../../services/Services.js';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const Register = () => {
+
+  const navigate=useNavigate();
+
   const [formData, setFormData] = useState({
     firstname: '',
     lastname: '',
@@ -74,6 +79,23 @@ const Register = () => {
       photo: null,
     });
     setPhotoPreview(null);
+
+    // Navigate to login page after registration
+    (async()=>{
+      let data=await services.register(formData);
+      try{
+        if (data.status==201) {
+          toast.success("Registered Successfully");
+          navigate('/login');
+        }
+        else{
+          toast.error("something went wrong");
+        }
+      }catch(error){
+        toast.error("something went wrong");
+      }
+    })()
+
   };
 
   return (
