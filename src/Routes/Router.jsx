@@ -18,10 +18,7 @@ let Routes= createBrowserRouter([
    path:"/home",
    element:<Home/>
     },
-    {
-     path:"/preview",
-   element:<Preview/>
-    },
+   
     
 
 ])
