@@ -144,12 +144,15 @@ function Login() {
     <div className="min-h-screen bg-[url('/img.jpg')] bg-cover flex items-center justify-end px-100 pr-50 bg-black/50 bg-blend-multiply">
       <div className="  w-full max-w-md p-10 transition-transform duration-300 hover:scale-105 border-2 bg-black shadow-2xl shadow-white rounded-2xl ">
         <h2 className="bg-linear-to-r from-violet-500 to-pink-500 bg-clip-text text-3xl font-bold text-transparent text-center mb-8 ">
+      <div className="  w-full max-w-md p-10 transition-transform duration-300 hover:scale-105 border-2 bg-black shadow-2xl shadow-white rounded-2xl">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
           Login to Your Account
         </h2>
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label className="block mb-2 text-sm font-medium text-white">
+            <label className="block mb-2 text-sm font-medium text-gray-700">
               Email Address
             </label>
             <input
@@ -164,6 +167,7 @@ function Login() {
 
           <div>
             <label className="block mb-2 text-sm font-medium text-white">
+            <label className="block mb-2 text-sm font-medium text-gray-700">
               Password
             </label>
             <input
@@ -172,6 +176,7 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:scale-105"
+              className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-pink-400 focus:scale-105"
               required
             />
           </div>
@@ -188,6 +193,7 @@ function Login() {
         </form>
 
         <p className="text-center text-sm mt-6 text-white">
+        <p className="text-center text-sm mt-6 text-gray-700">
           Don’t have an account?{" "}
           <button
             type="button"

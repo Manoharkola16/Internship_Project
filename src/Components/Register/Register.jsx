@@ -915,6 +915,8 @@ const Register = () => {
   return (
     <div className=" bg-black/50 bg-blend-multiply flex justify-center items-center min-h-screen bg-[url('/public/img.jpg')] bg-cover p-6 pl-180 ">
       <div className="w-full max-w-md p-6 rounded-lg border-2 transition-transform duration-300 hover:scale-105 bg-black shadow-2xl shadow-white">
+    <div className="flex justify-center items-center min-h-screen bg-[url('/public/img.jpg')] bg-cover p-6 pl-180">
+      <div className="w-full max-w-md p-6 rounded-lg border-2">
         <h2 className="text-2xl font-bold text-center mb-6">Registration</h2>
 
         {(formError || errorMessage) && (
@@ -958,6 +960,7 @@ const Register = () => {
               value={formData.username}
               onChange={handleChange}
               className="w-full  border-gray-300 rounded-lg bg-gray-50 rounded p-2 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:scale-105"
+              className="w-full border rounded p-2 focus:scale-110 focus:border-blue-500 focus:outline-none transition-transform duration-300"
             />
           </div>
 
@@ -969,6 +972,7 @@ const Register = () => {
               value={formData.email}
               onChange={handleChange}
               className="w-full  border-gray-300 rounded-lg bg-gray-50 rounded p-2 focus:scale-110 focus:ring-indigo-300 focus:outline-none transition-transform duration-300"
+              className="w-full border rounded p-2 focus:scale-110 focus:border-blue-500 focus:outline-none transition-transform duration-300"
             />
           </div>
 
@@ -980,6 +984,7 @@ const Register = () => {
               value={formData.password}
               onChange={handleChange}
               className="w-full  border-gray-300 rounded-lg bg-gray-50 rounded p-2 pr-10 focus:scale-110 focus:ring-indigo-300 focus:outline-none transition-transform duration-300"
+              className="w-full border rounded p-2 pr-10 focus:scale-110 focus:border-blue-500 focus:outline-none transition-transform duration-300"
             />
             <button
               type="button"
@@ -998,6 +1003,7 @@ const Register = () => {
               value={formData.confirmPassword}
               onChange={handleChange}
               className={`w-full  border-gray-300 rounded-lg bg-gray-50 rounded p-2 pr-10 focus:scale-110 focus:ring-indigo-300 focus:outline-none transition-transform duration-300 ${
+              className={`w-full border rounded p-2 pr-10 focus:scale-110 focus:border-blue-500 focus:outline-none transition-transform duration-300 ${
                 passwordMismatch ? 'border-red-500' : ''
               }`}
             />
@@ -1022,6 +1028,7 @@ const Register = () => {
               value={formData.phone}
               onChange={handleChange}
               className="w-full  border-gray-300 rounded-lg bg-gray-50 bg-gray-100 bg-white rounded p-2 focus:ring-indigo-300 focus:border-blue-500 focus:outline-none transition-transform duration-300"
+              className="w-full border rounded p-2 focus:scale-110 focus:border-blue-500 focus:outline-none transition-transform duration-300"
             />
           </div>
 
