@@ -139,7 +139,7 @@ const Register = () => {
       !formData.email ||
       !formData.password ||
       !formData.confirmPassword ||
-      !formData.phone ||
+      // !formData.phone ||
       !formData.profilePhoto
     ) {
       setFormError('Please fill all input fields and upload a profile photo.');
