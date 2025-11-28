@@ -1,7 +1,7 @@
   import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
   import axios from "axios";
 
-  const BASE_URL = "http://192.168.0.194:5000";
+const BASE_URL = "http://192.168.0.212:5000";
 
   const initialState = {
     user: [],
@@ -9,7 +9,7 @@
     error: null,
   };
 
-  // ✅ REGISTER USER
+  //! ✅ REGISTER USER
   export const registerUser = createAsyncThunk(
     "user/registerUser",
     async (payload, { rejectWithValue }) => {
@@ -28,7 +28,7 @@
     }
   );
 
-  // ✅ LOGIN USER
+  //! ✅ LOGIN USER
   export const loginUser = createAsyncThunk(
     "user/loginUser",
     async (payload, { rejectWithValue }) => {
@@ -45,6 +45,8 @@
       }
     }
   );
+
+  
 
   // -- userSlice --
   const userSlice = createSlice({
