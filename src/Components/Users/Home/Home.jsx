@@ -18,7 +18,7 @@ import {
   FiUser,
   FiX,
 } from "react-icons/fi";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const initialPosts = [
   {
@@ -461,7 +461,7 @@ export default function Home() {
   const [sidePanel, setSidePanel] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   let {user}=useSelector((a)=>a.user)
-  // console.log(user) 
+  // console.log(user)
 
   // notification & recent searches state moved to top-level so SlidePanel can update/clear them
   const [notificationsState, setNotificationsState] = useState(initialNotifications);

@@ -24,9 +24,6 @@
 /* .float{
 animation: floatup 1s linear forwards;
 } */
- ::-webkit-scrollbar{
-  display: none;
- }
 
 
 @theme {

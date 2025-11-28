@@ -12,7 +12,7 @@ const App = () => {
   <div className='fixed z-9999'>
       <MouseTrail/>
   </div>
-        <RouterProvider router={routes}></RouterProvider>
+        <RouterProvider router={Routes}></RouterProvider>
 
     </>
   )
