@@ -1,11 +1,11 @@
    
 import Login from '../Components/Login/Login';
 import Register from '../Components/Register/Register';
-import Preview from '../Components/Preview/Preview';
 import { createBrowserRouter } from 'react-router-dom';
 import Home from '../Components/Users/Home/Home';
 import AddFriends from '../Components/Users/Home/AddFriends';
 import ProfilePage from '../Components/Users/Home/ProfilePage';
+import Settings from '../Components/Users/Home/Settings';
 
 // import Home from '../Components/Home/Home';
 
@@ -27,9 +27,14 @@ let Routes= createBrowserRouter([
     element:<AddFriends/>
     },
     {
-    path:"/Profilepage",
+    path:"/profile",
     element:<ProfilePage/>
-    }
+    },
+    {
+    path:"/settings",
+    element:<Settings/>
+    },
+
    
     
 

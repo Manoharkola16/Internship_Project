@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = "http://192.168.0.26:5000";
+// BASE_URL should point to the host only — endpoints include the `/api` prefix below
+const BASE_URL = "https://robo-1-qqhu.onrender.com";
 
 const initialState = {
   user: [],
@@ -22,8 +23,9 @@ export const registerUser = createAsyncThunk(
       console.log("Register success:", data);
       return data;
     } catch (err) {
-      console.error("Register error:", err);
-      return rejectWithValue(err.response?.data || "Registration failed");
+      console.error("Register error:", err?.response ?? err.message ?? err);
+      // Provide the server response body when available, otherwise return the error message
+      return rejectWithValue(err.response?.data ?? { message: err.message ?? "Registration failed" });
     }
   }
 );
@@ -40,8 +42,8 @@ export const loginUser = createAsyncThunk(
       console.log("Login success:", data);
       return data;
     } catch (err) {
-      console.error("Login error:", err);
-      return rejectWithValue(err.response?.data || "Login failed");
+      console.error("Login error:", err?.response ?? err.message ?? err);
+      return rejectWithValue(err.response?.data ?? { message: err.message ?? "Login failed" });
     }
   }
 );
