@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = "https://robo-1-qqhu.onrender.com";
+const BASE_URL = "http://192.168.0.212:5000";
 
 /* -----------------------------------------------
    ✅ GET ALL BLOGS 
