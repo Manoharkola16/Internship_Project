@@ -50,7 +50,8 @@ const initialPosts = [
   {
     id: 4,
     author: "Sara Wilson",
-    content: "Design tips to make your blog posts more readable and visually pleasing.",
+    content:
+      "Design tips to make your blog posts more readable and visually pleasing.",
     likes: 9,
     comments: 2,
     saves: 4,
@@ -58,7 +59,8 @@ const initialPosts = [
   {
     id: 5,
     author: "David Kim",
-    content: "Why storytelling is the most powerful tool for building a loyal audience.",
+    content:
+      "Why storytelling is the most powerful tool for building a loyal audience.",
     likes: 31,
     comments: 12,
     saves: 15,
@@ -98,11 +100,14 @@ const initialRecentSearches = [
   "Health & wellness",
 ];
 
+
 function NavButton({ icon: Icon, label, active, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-3 px-3 py-2 rounded-lg w-full text-sm font-medium transition
+      className={`flex items-center md:gap-3 px-0 md:px-3 py-2 rounded-lg 
+        w-14 md:w-full justify-center md:justify-start 
+        text-sm font-medium transition
         ${
           active
             ? "bg-blue-50 text-blue-600"
@@ -110,7 +115,7 @@ function NavButton({ icon: Icon, label, active, onClick }) {
         }`}
     >
       <Icon className="text-lg" />
-      <span>{label}</span>
+      <span className="hidden md:inline">{label}</span>
     </button>
   );
 }
@@ -167,9 +172,13 @@ function PostCard({ post }) {
           className="flex items-center gap-1 text-xs font-medium hover:opacity-80 transition"
         >
           <FiHeart
-            className={`text-lg ${liked ? "text-red-500 fill-red-500" : "text-gray-500"}`}
+            className={`text-lg ${
+              liked ? "text-red-500 fill-red-500" : "text-gray-500"
+            }`}
           />
-          <span className={liked ? "text-red-500" : "text-gray-600"}>Like</span>
+          <span className={liked ? "text-red-500" : "text-gray-600"}>
+            Like
+          </span>
           <span className="text-[11px] text-gray-500">• {likeCount}</span>
         </button>
 
@@ -187,9 +196,13 @@ function PostCard({ post }) {
           className="flex items-center gap-1 text-xs font-medium hover:opacity-80 transition"
         >
           <FiBookmark
-            className={`text-lg ${saved ? "text-purple-600 fill-purple-600" : "text-gray-500"}`}
+            className={`text-lg ${
+              saved ? "text-purple-600 fill-purple-600" : "text-gray-500"
+            }`}
           />
-          <span className={saved ? "text-purple-600" : "text-gray-600"}>Save</span>
+          <span className={saved ? "text-purple-600" : "text-gray-600"}>
+            Save
+          </span>
           <span className="text-[11px] text-gray-500">• {saveCount}</span>
         </button>
       </div>
@@ -197,13 +210,7 @@ function PostCard({ post }) {
   );
 }
 
-/**
- * SlidePanel:
- * - top/bottom inset so panel appears shorter than full height
- * - small semicircles are two small circle divs overlapping the panel's right edge
- * - Search: red Clear All next to Recent searches
- * - Notifications: Clear All in header (red) that clears all notifications
- */
+
 function SlidePanel({
   type,
   onClose,
@@ -236,7 +243,7 @@ function SlidePanel({
 
       {/* Panel container */}
       <div
-        className={`fixed left-0 top-16 bottom-16 z-50 w-80 bg-white shadow-lg transform transition-transform duration-300 overflow-hidden
+        className={`fixed left-0 top-4 bottom-4 md:top-16 md:bottom-16 z-50 w-72 sm:w-80 bg-white shadow-lg transform transition-transform duration-300 overflow-hidden
           ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
         style={{
           display: "flex",
@@ -284,7 +291,10 @@ function SlidePanel({
               </button>
             )}
 
-            <button onClick={onClose} className="p-1 rounded-full hover:bg-gray-100">
+            <button
+              onClick={onClose}
+              className="p-1 rounded-full hover:bg-gray-100"
+            >
               <FiX />
             </button>
           </div>
@@ -313,7 +323,6 @@ function SlidePanel({
                     <button
                       onClick={() => setSearchInput("")}
                       className="text-xs text-gray-500 px-2 py-1 rounded hover:bg-gray-100"
-                      title="Clear input"
                     >
                       Clear
                     </button>
@@ -327,7 +336,6 @@ function SlidePanel({
                     Recent searches
                   </h4>
 
-                  {/* Clear All placed beside Recent searches (red) */}
                   <button
                     onClick={clearRecentSearches}
                     className="text-xs px-2 py-1 rounded-md border border-red-100 text-red-600 bg-red-50 hover:bg-red-100 transition"
@@ -460,12 +468,16 @@ export default function Home() {
   const [activeNav, setActiveNav] = useState("home");
   const [sidePanel, setSidePanel] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  let {user}=useSelector((a)=>a.user)
-  // console.log(user)
+  // Read user slice safely — backend payload shape may vary.
+  const stateUser = useSelector((s) => s.user);
+  // If the reducer stores the payload under `user` (state.user.user), use that; otherwise use the slice directly.
+  const userObj = stateUser && stateUser.user ? stateUser.user : stateUser;
 
-  // notification & recent searches state moved to top-level so SlidePanel can update/clear them
-  const [notificationsState, setNotificationsState] = useState(initialNotifications);
-  const [recentSearchesState, setRecentSearchesState] = useState(initialRecentSearches);
+  const [notificationsState, setNotificationsState] =
+    useState(initialNotifications);
+  const [recentSearchesState, setRecentSearchesState] = useState(
+    initialRecentSearches
+  );
 
 const dispatch = useDispatch();
 // Get blogs from Redux store
@@ -514,123 +526,19 @@ useEffect(() => {
   return (
     <div className="min-h-screen w-full bg-gray-50 text-gray-900">
       <div className="flex h-screen w-full">
-        {/* SIDEBAR */}
-        <aside className="w-64 bg-white border-r border-gray-200 flex flex-col items-center py-8 gap-8 flex-shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-purple-700 text-white flex items-center justify-center text-lg font-bold">
-              {
-                user.user.username[0].toUpperCase()
-              }
-            </div>
-            <span className="font-semibold text-lg">BlogVerse</span>
-          </div>
-
-          <div className="flex flex-col items-center gap-3">
-            <img
-              src={`data:image/jpeg;base64,${user.user.profilePhoto}`}
-              alt="profile"
-              className="w-24 h-24 rounded-full object-cover"
-            />
-
-            <span className="font-medium">
-              {user.user.username}
-            </span>
-
-            <div className="mt-2 flex items-center gap-4 text-sm text-gray-600">
-              <div className="text-center">
-                <div className="font-semibold text-gray-900">10</div>
-                <div className="text-xs">Posts</div>
-              </div>
-              <div className="text-center">
-                <div className="font-semibold text-gray-900">{
-                  user.user.following.length
-                  }</div>
-                <div className="text-xs">Following</div>
-              </div>
-              <div className="text-center">
-                <div className="font-semibold text-gray-900">{
-                  user.user.followers.length
-                  }</div>
-                <div className="text-xs">Followers</div>
-              </div>
-            </div>
-
-            <button
-              onClick={() => navigate("/Profilepage")}
-              className="px-5 py-1.5 rounded-full bg-purple-700 text-white text-sm shadow hover:bg-purple-800 transition"
-            >
-              MyProfile
-            </button>
-          </div>
-
-          {/* NAV BUTTONS */}
-          <nav className="w-full px-8 flex flex-col gap-3">
-            <NavButton
-              icon={FiHome}
-              label="Home"
-              active={activeNav === "home"}
-              onClick={() => {
-                setActiveNav("home");
-                setSidePanel(null);
-                setShowCreateModal(false);
-              }}
-            />
-
-            <NavButton
-              icon={FiSearch}
-              label="Search"
-              active={activeNav === "search"}
-              onClick={handleOpenSearch}
-            />
-
-            <NavButton
-              icon={FiBell}
-              label="Notifications"
-              active={activeNav === "notifications"}
-              onClick={handleOpenNotifications}
-            />
-
-            <NavButton
-              icon={FiEdit3}
-              label="Create Blog"
-              active={activeNav === "create"}
-              onClick={handleOpenCreate}
-            />
-
-            <NavButton
-              icon={FiUserPlus}
-              label="Add Friends"
-              active={activeNav === "friends"}
-              onClick={() => {
-                setActiveNav("friends");
-                setSidePanel(null);
-                setShowCreateModal(false);
-              }}
-            />
-
-            <NavButton
-              icon={FiSettings}
-              label="Settings"
-              active={activeNav === "settings"}
-              onClick={() => {
-                setActiveNav("settings");
-                setSidePanel(null);
-                setShowCreateModal(false);
-              }}
-            />
-          </nav>
-        </aside>
+        <Navbar />
 
         {/* RIGHT SIDE (SCROLLABLE) */}
-        <main className="flex-1 h-screen overflow-y-auto p-8 flex flex-col gap-6">
+        <main className="flex-1 h-screen overflow-y-auto p-4 md:p-8 flex flex-col gap-6">
           {/* HERO SECTION */}
-          <section className="flex gap-6 items-center border-b border-gray-200 pb-6">
+          <section className="flex flex-col md:flex-row gap-6 items-center border-b border-gray-200 pb-6 text-center md:text-left">
             <div className="flex-1 space-y-3">
-              <h1 className="text-5xl font-bold leading-tight">
-                Explore Stories,<br /> Ideas & Inspiration
+              <h1 className="text-3xl md:text-5xl font-bold leading-tight">
+                Explore Stories,
+                <br /> Ideas & Inspiration
               </h1>
 
-              <p className="text-xl text-gray-600 max-w-md">
+              <p className="text-lg md:text-xl text-gray-600 max-w-md mx-auto md:mx-0">
                 Discover trending blogs from creators around the globe.
               </p>
             </div>
@@ -639,6 +547,7 @@ useEffect(() => {
               <img
                 src="/public/home page image.png"
                 alt="hero"
+                // className="w-full max-w-sm md:max-w-xl h-auto md:h-[300px] md:pr-20 object-contain"
                 className="w-[650px] h-[300px] pr-[80px]"
               />
             </div>

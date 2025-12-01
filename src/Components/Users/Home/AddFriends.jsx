@@ -1,5 +1,19 @@
 import React, { useState } from "react";
+import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
+import {
+  FiHome,
+  FiSearch,
+  FiBell,
+  FiEdit3,
+  FiUserPlus,
+  FiSettings,
+  FiX,
+} from "react-icons/fi";
 
+/* -----------------------------------------------------------
+   DUMMY DATA
+----------------------------------------------------------- */
 const initialRequests = [
   {
     id: 1,
@@ -57,223 +71,273 @@ const initialRequests = [
   },
 ];
 
-export default function AddFriends() {
-  const [requests, setRequests] = useState(
-    initialRequests.map((r) => ({ ...r, status: "pending" })) // pending | accepted | declined
-  );
-  const [activeTab, setActiveTab] = useState("all"); // all | accepted | declined
-  const [search, setSearch] = useState("");
+const initialNotifications = [
+  "Priya commented on your post.",
+  "You have 3 new followers.",
+  "Your blog 'Daily Writing Habits' reached 1k views!",
+  "Alex liked your recent blog.",
+  "New recommendation: 'Top 10 productivity hacks'.",
+  "Reminder: Finish your draft 'Travel Diaries'.",
+];
 
-  const pendingCount = requests.filter((r) => r.status === "pending").length;
-  const acceptedCount = requests.filter((r) => r.status === "accepted").length;
-  const declinedCount = requests.filter((r) => r.status === "declined").length;
+const initialRecentSearches = [
+  "Productivity blogs",
+  "Travel stories",
+  "Tech trends 2025",
+  "Minimalist lifestyle",
+  "Photography blogs",
+];
 
-  function handleAction(id, status) {
-    setRequests((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, status } : r))
-    );
-  }
-
-  function getFilteredRequests() {
-    let list;
-    if (activeTab === "all") {
-      list = requests.filter((r) => r.status === "pending");
-    } else if (activeTab === "accepted") {
-      list = requests.filter((r) => r.status === "accepted");
-    } else {
-      list = requests.filter((r) => r.status === "declined");
-    }
-
-    if (!search.trim()) return list;
-
-    const term = search.toLowerCase();
-    return list.filter(
-      (r) =>
-        r.name.toLowerCase().includes(term) ||
-        r.username.toLowerCase().includes(term) ||
-        r.location.toLowerCase().includes(term)
-    );
-  }
-
-  const visibleRequests = getFilteredRequests();
-
+/* -----------------------------------------------------------
+   SIDEBAR NAV BUTTON
+----------------------------------------------------------- */
+function NavButton({ icon: Icon, label, active, onClick }) {
   return (
-    <div className="min-h-screen bg-gray-100 flex">
-      {/* Full-width main container */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <header className="px-8 pt-8 pb-4 bg-white border-b">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-                Friend Requests
-              </h1>
-              <p className="text-sm text-gray-500 mt-1">
-                Manage your pending friend requests
-              </p>
-
-              {/* Tabs */}
-              <div className="mt-5 inline-flex bg-gray-100 rounded-full p-1 text-sm font-medium">
-                <button
-                  onClick={() => setActiveTab("all")}
-                  className={`px-4 py-1.5 rounded-full flex items-center gap-2 ${
-                    activeTab === "all"
-                      ? "bg-white shadow text-gray-900"
-                      : "text-gray-500"
-                  }`}
-                >
-                  All Requests
-                  <span className="inline-flex items-center justify-center text-xs rounded-full bg-purple-100 text-purple-700 px-2 py-0.5">
-                    {pendingCount}
-                  </span>
-                </button>
-                <button
-                  onClick={() => setActiveTab("accepted")}
-                  className={`px-4 py-1.5 rounded-full flex items-center gap-2 ${
-                    activeTab === "accepted"
-                      ? "bg-white shadow text-gray-900"
-                      : "text-gray-500"
-                  }`}
-                >
-                  Sent Requests
-                  <span className="inline-flex items-center justify-center text-xs rounded-full bg-gray-200 text-gray-700 px-2 py-0.5">
-                    {acceptedCount}
-                  </span>
-                </button>
-                <button
-                  onClick={() => setActiveTab("declined")}
-                  className={`px-4 py-1.5 rounded-full flex items-center gap-2 ${
-                    activeTab === "declined"
-                      ? "bg-white shadow text-gray-900"
-                      : "text-gray-500"
-                  }`}
-                >
-                  Suggestions
-                  <span className="inline-flex items-center justify-center text-xs rounded-full bg-gray-200 text-gray-700 px-2 py-0.5">
-                    {declinedCount}
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            {/* Search bar */}
-            <div className="w-full md:w-80">
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
-                  🔍
-                </span>
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search requests..."
-                  className="w-full pl-9 pr-3 py-2 rounded-full border border-gray-300 text-sm outline-none bg-gray-50 focus:bg-white focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
-                />
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Requests grid */}
-        <main className="flex-1 px-8 py-6">
-          {visibleRequests.length === 0 ? (
-            <div className="text-center text-gray-500 mt-16">
-              No requests in this section.
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {visibleRequests.map((req) => (
-                <FriendCard
-                  key={req.id}
-                  request={req}
-                  onAccept={() => handleAction(req.id, "accepted")}
-                  onDecline={() => handleAction(req.id, "declined")}
-                  disabled={req.status !== "pending"}
-                />
-              ))}
-            </div>
-          )}
-        </main>
-      </div>
-    </div>
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-3 px-3 py-2 rounded-lg w-full text-sm font-medium transition
+        ${
+          active
+            ? "bg-blue-50 text-blue-600"
+            : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+        }`}
+    >
+      <Icon className="text-lg" />
+      <span>{label}</span>
+    </button>
   );
 }
 
-function FriendCard({ request, onAccept, onDecline, disabled }) {
-  const statusLabel =
-    request.status === "accepted"
-      ? "Accepted"
-      : request.status === "declined"
-      ? "Declined"
-      : "Pending";
+/* -----------------------------------------------------------
+   SLIDE PANEL (Search / Notifications)
+----------------------------------------------------------- */
+function SlidePanel({
+  type,
+  onClose,
+  notificationsState,
+  setNotificationsState,
+  recentSearchesState,
+  setRecentSearchesState,
+}) {
+  const [searchInput, setSearchInput] = useState("");
 
-  const statusColor =
-    request.status === "accepted"
-      ? "text-green-600 bg-green-50"
-      : request.status === "declined"
-      ? "text-red-600 bg-red-50"
-      : "text-yellow-600 bg-yellow-50";
+  const clearNotifications = () => setNotificationsState([]);
+  const clearRecentSearches = () => setRecentSearchesState([]);
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm px-5 py-4 flex flex-col gap-3">
-      {/* Top row */}
-      <div className="flex items-start gap-4">
-        <div className="relative">
-          <div className="w-12 h-12 rounded-lg bg-black" />
-          <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-white bg-green-400" />
+    <>
+      {/* overlay */}
+      {type && (
+        <div
+          className="fixed inset-0 bg-black/30 z-40"
+          onClick={onClose}
+        />
+      )}
+
+      <div
+        className={`fixed left-0 top-16 bottom-16 z-50 w-80 bg-white border-r shadow-xl transform transition-transform duration-300 
+          ${type ? "translate-x-0" : "-translate-x-full"}`}
+      >
+        {/* panel header */}
+        <div className="flex justify-between items-center px-4 py-3 border-b">
+          <h3 className="font-semibold text-gray-900">
+            {type === "search" ? "Search" : "Notifications"}
+          </h3>
+
+          <div className="flex items-center gap-2">
+            {type === "notifications" && (
+              <button
+                onClick={clearNotifications}
+                className="text-xs text-red-600 px-2 py-1 bg-red-50 rounded hover:bg-red-100"
+              >
+                Clear All
+              </button>
+            )}
+
+            <button onClick={onClose}>
+              <FiX />
+            </button>
+          </div>
         </div>
-        <div className="flex-1">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="font-semibold text-gray-900">
-                {request.name}
+
+        {/* CONTENT */}
+        <div className="p-4 overflow-y-auto h-full">
+          {/* SEARCH PANEL */}
+          {type === "search" && (
+            <>
+              <div className="mb-4">
+                <label className="block text-xs text-gray-500 mb-1">
+                  Search
+                </label>
+
+                <div className="flex items-center border rounded-lg px-3 py-2 gap-2">
+                  <FiSearch className="text-gray-400" />
+                  <input
+                    type="text"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    className="flex-1 text-sm outline-none"
+                    placeholder="Search BlogVerse..."
+                  />
+                </div>
               </div>
-              <div className="text-xs text-gray-500">
-                {request.username}
+
+              <div>
+                <div className="flex justify-between mb-2">
+                  <h4 className="text-xs font-semibold text-gray-700">
+                    Recent Searches
+                  </h4>
+
+                  <button
+                    onClick={clearRecentSearches}
+                    className="text-xs text-red-600 px-2 py-1 bg-red-50 rounded hover:bg-red-100"
+                  >
+                    Clear All
+                  </button>
+                </div>
+
+                {recentSearchesState.length === 0 ? (
+                  <p className="text-sm text-gray-500">No recent searches.</p>
+                ) : (
+                  <ul className="space-y-2">
+                    {recentSearchesState.map((txt, idx) => (
+                      <li
+                        key={idx}
+                        className="text-sm bg-gray-100 px-3 py-2 rounded hover:bg-gray-200 cursor-pointer"
+                      >
+                        {txt}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
+            </>
+          )}
+
+          {/* NOTIFICATIONS PANEL */}
+          {type === "notifications" && (
+            <div className="space-y-3">
+              {notificationsState.length === 0 ? (
+                <p className="text-sm text-gray-500">No notifications.</p>
+              ) : (
+                notificationsState.map((msg, i) => (
+                  <div
+                    key={i}
+                    className="p-3 bg-gray-100 rounded border text-sm"
+                  >
+                    {msg}
+                  </div>
+                ))
+              )}
             </div>
-            <span
-              className={`text-xs px-2 py-0.5 rounded-full ${statusColor}`}
-            >
-              {statusLabel}
-            </span>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* -----------------------------------------------------------
+   CREATE BLOG MODAL
+----------------------------------------------------------- */
+export function CreateBlogModal({ open, onClose }) {
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
+  if (!open) return null;
+
+  return (
+    <>
+      <div
+        onClick={onClose}
+        className="fixed inset-0 bg-black/40 z-40"
+      />
+
+      <div className="fixed inset-0 z-50 flex justify-center items-center p-4">
+        <div className="bg-white rounded-lg w-full max-w-lg p-6 shadow-xl space-y-4">
+          <div className="flex justify-between items-center">
+            <h3 className="font-semibold text-lg">Create Blog</h3>
+            <button onClick={onClose}>
+              <FiX />
+            </button>
           </div>
 
-          <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
-            <span>👥 {request.mutual} mutual friends</span>
+          <input
+            className="w-full border px-3 py-2 rounded text-sm"
+            placeholder="Blog Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+
+          <textarea
+            className="w-full border px-3 py-2 rounded text-sm h-32"
+            placeholder="Write your story..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+
+          <div className="flex justify-end gap-2">
+            <button
+              className="px-4 py-2 text-sm border rounded"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            <button className="px-4 py-2 text-sm bg-blue-600 text-white rounded">
+              Post
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* -----------------------------------------------------------
+   FRIEND CARD
+----------------------------------------------------------- */
+function FriendCard({ request, onAccept, onDecline, disabled }) {
+  return (
+    <div className="bg-white rounded-2xl border shadow-sm p-5 flex flex-col gap-3">
+      <div className="flex gap-4">
+        <div className="w-12 h-12 bg-black rounded-lg" />
+
+        <div className="flex-1">
+          <div className="font-semibold">{request.name}</div>
+          <div className="text-xs text-gray-500">{request.username}</div>
+
+          <div className="flex gap-3 text-xs text-gray-500 mt-1">
+            <span>👥 {request.mutual} mutual</span>
             <span>• {request.time}</span>
           </div>
+
+          <div className="text-xs text-gray-500 mt-1">
+            {request.title} • {request.location}
+          </div>
         </div>
       </div>
 
-      {/* Job / location */}
-      <div className="text-xs text-gray-500 mt-1 ml-16">
-        {request.title} • {request.location}
-      </div>
-
-      {/* Actions */}
-      <div className="flex items-center gap-3 mt-3 ml-16">
+      <div className="flex gap-3 mt-3 ml-16">
         <button
+          className={`px-5 py-2 rounded-full text-sm ${
+            disabled
+              ? "bg-purple-200 text-white"
+              : "bg-purple-600 text-white hover:bg-purple-700"
+          }`}
           onClick={onAccept}
           disabled={disabled}
-          className={`px-5 py-2 rounded-full text-sm font-medium transition 
-            ${
-              disabled
-                ? "bg-purple-200 text-white cursor-not-allowed"
-                : "bg-purple-600 text-white hover:bg-purple-700"
-            }`}
         >
           Accept
         </button>
+
         <button
+          className={`px-5 py-2 rounded-full text-sm ${
+            disabled
+              ? "bg-gray-200 text-gray-400"
+              : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+          }`}
           onClick={onDecline}
           disabled={disabled}
-          className={`px-5 py-2 rounded-full text-sm font-medium transition 
-            ${
-              disabled
-                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
         >
           Decline
         </button>
@@ -281,5 +345,187 @@ function FriendCard({ request, onAccept, onDecline, disabled }) {
     </div>
   );
 }
+
+/* -----------------------------------------------------------
+   MAIN ADD FRIENDS COMPONENT
+----------------------------------------------------------- */
+export default function AddFriends() {
+  const navigate = useNavigate();
+
+  /* Sidebar behavior */
+  const [activeNav, setActiveNav] = useState("friends");
+  const [sidePanel, setSidePanel] = useState(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const [notificationsState, setNotificationsState] = useState(
+    initialNotifications
+  );
+  const [recentSearchesState, setRecentSearchesState] = useState(
+    initialRecentSearches
+  );
+
+  /* Friend list */
+  const [requests, setRequests] = useState(
+    initialRequests.map((r) => ({ ...r, status: "pending" }))
+  );
+  const [activeTab, setActiveTab] = useState("all");
+  const [pageSearch, setPageSearch] = useState("");
+
+  const pending = requests.filter((r) => r.status === "pending").length;
+  const accepted = requests.filter((r) => r.status === "accepted").length;
+  const declined = requests.filter((r) => r.status === "declined").length;
+
+  const handleAction = (id, status) => {
+    setRequests((prev) =>
+      prev.map((r) => (r.id === id ? { ...r, status } : r))
+    );
+  };
+
+  const filteredRequests = requests.filter((r) => {
+    const matchTab =
+      activeTab === "all"
+        ? r.status === "pending"
+        : activeTab === "accepted"
+        ? r.status === "accepted"
+        : r.status === "declined";
+
+    const matchSearch =
+      r.name.toLowerCase().includes(pageSearch.toLowerCase()) ||
+      r.username.toLowerCase().includes(pageSearch.toLowerCase()) ||
+      r.location.toLowerCase().includes(pageSearch.toLowerCase());
+
+    return matchTab && matchSearch;
+  });
+
+  /* NAV ACTIONS */
+  const openSearchPanel = () => {
+    setSidePanel("search");
+    setActiveNav("search");
+  };
+
+  const openNotifPanel = () => {
+    setSidePanel("notifications");
+    setActiveNav("notifications");
+  };
+
+  const openCreateModal = () => {
+    setShowCreateModal(true);
+    setActiveNav("create");
+  };
+
+  return (
+    <div className="min-h-screen w-full bg-gray-100 flex">
+
+      {/* SHARED LEFT NAVBAR */}
+      <Navbar />
+
+      {/* -----------------------------------------------------------
+         RIGHT SIDE — FRIEND REQUEST SECTION
+      ----------------------------------------------------------- */}
+      <div className="flex-1 flex flex-col">
+
+        {/* HEADER */}
+        <header className="px-8 py-6 bg-white border-b flex justify-between items-center">
+
+          <div>
+            <h1 className="text-3xl font-bold">Add Friends</h1>
+            <p className="text-gray-500 text-sm">
+              Manage your friend connections
+            </p>
+
+            {/* TABS */}
+            <div className="mt-4 inline-flex bg-gray-100 rounded-full p-1 text-sm">
+              <button
+                onClick={() => setActiveTab("all")}
+                className={`px-4 py-1.5 rounded-full ${
+                  activeTab === "all"
+                    ? "bg-white shadow font-medium"
+                    : "text-gray-500"
+                }`}
+              >
+                All ({pending})
+              </button>
+
+              <button
+                onClick={() => setActiveTab("accepted")}
+                className={`px-4 py-1.5 rounded-full ${
+                  activeTab === "accepted"
+                    ? "bg-white shadow font-medium"
+                    : "text-gray-500"
+                }`}
+              >
+                Sent ({accepted})
+              </button>
+
+              <button
+                onClick={() => setActiveTab("declined")}
+                className={`px-4 py-1.5 rounded-full ${
+                  activeTab === "declined"
+                    ? "bg-white shadow font-medium"
+                    : "text-gray-500"
+                }`}
+              >
+                Suggestions ({declined})
+              </button>
+            </div>
+          </div>
+
+          {/* WIDE SEARCH BAR */}
+          <div className="w-[430px]">
+            <div className="relative">
+              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
+
+              <input
+                type="text"
+                value={pageSearch}
+                onChange={(e) => setPageSearch(e.target.value)}
+                placeholder="Search people..."
+                className="w-full pl-12 pr-4 py-3 rounded-full bg-gray-50 border border-gray-300 outline-none 
+                focus:bg-white focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition text-sm"
+              />
+            </div>
+          </div>
+        </header>
+
+        {/* FRIEND CARDS */}
+        <main className="p-8">
+          {filteredRequests.length === 0 ? (
+            <p className="text-center text-gray-500 mt-20">
+              No results found.
+            </p>
+          ) : (
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {filteredRequests.map((req) => (
+                <FriendCard
+                  key={req.id}
+                  request={req}
+                  disabled={req.status !== "pending"}
+                  onAccept={() => handleAction(req.id, "accepted")}
+                  onDecline={() => handleAction(req.id, "declined")}
+                />
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
+
+      {/* PANELS & MODALS */}
+      <SlidePanel
+        type={sidePanel}
+        onClose={() => setSidePanel(null)}
+        notificationsState={notificationsState}
+        setNotificationsState={setNotificationsState}
+        recentSearchesState={recentSearchesState}
+        setRecentSearchesState={setRecentSearchesState}
+      />
+
+      <CreateBlogModal
+        open={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+      />
+    </div>
+  );
+}
+
 
 

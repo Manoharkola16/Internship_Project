@@ -1,3 +1,4 @@
+
 import React, {
   useCallback,
   useEffect,
@@ -65,15 +66,13 @@ const Register = () => {
     profilePhoto: null,
   });
 
-  // PREVIEW + ERRORS
   const [profilePhotoPreview, setProfilePhotoPreview] = useState(null);
   const [formError, setFormError] = useState("");
 
-  // PASSWORD EYE TOGGLE
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // ================== CROPPER ==================
+  // CROPPER
   const [showCropper, setShowCropper] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -82,16 +81,14 @@ const Register = () => {
 
   const fileInputRef = useRef(null);
 
-  // ================== ANIMATIONS ==================
+  // ANIMATIONS
   const [imageStage, setImageStage] = useState("idle");
   const [blushVisible, setBlushVisible] = useState(false);
   const [hearts, setHearts] = useState([]);
 
   const emojis = ["❤️", "😍", "🙈", "😘", "❤️‍🔥"];
-
   const parentRefs = useRef([]);
   const containerRefs = useRef([]);
-
   parentRefs.current = [];
   containerRefs.current = [];
 
@@ -112,13 +109,12 @@ const Register = () => {
   const startPhotoAnimation = useCallback(() => {
     setImageStage("show");
     setBlushVisible(true);
-
     for (let i = 0; i < 50; i++) {
       setTimeout(createHeart, i * 80);
     }
   }, []);
 
-  // ================== MOUSE EYE MOVEMENT ==================
+  // EYE MOVEMENT
   useEffect(() => {
     const handler = (e) => {
       const x = e.clientX;
@@ -144,14 +140,13 @@ const Register = () => {
     return () => window.removeEventListener("mousemove", handler);
   }, []);
 
-  // ================= INPUT HANDLERS ==================
+  // INPUT HANDLERS
   const handleChange = (e) =>
     setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
 
   const handleFileSelect = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onloadend = () => {
       setImageSrc(reader.result);
@@ -162,7 +157,6 @@ const Register = () => {
 
   const handleSaveCropped = async () => {
     const { blob, dataUrl } = await getCroppedImg(imageSrc, croppedAreaPixels);
-
     const file = new File([blob], "profile.jpg", { type: "image/jpeg" });
 
     setFormData((p) => ({ ...p, profilePhoto: file }));
@@ -172,21 +166,21 @@ const Register = () => {
     startPhotoAnimation();
   };
 
-  // ================= SUBMIT ==================
+  // SUBMIT
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.profilePhoto) return setFormError("Upload your photo");
+    if (!formData.profilePhoto)
+      return setFormError("Upload your photo");
     if (formData.password !== formData.confirmPassword)
       return setFormError("Passwords do not match");
 
     try {
       const send = new FormData();
-
       send.append("username", formData.username);
       send.append("email", formData.email);
       send.append("password", formData.password);
-      send.append("profilePhoto", formData.profilePhoto); // ✔ Backend correct field
+      send.append("profilePhoto", formData.profilePhoto);
 
       await dispatch(registerUser(send)).unwrap();
 
@@ -201,17 +195,29 @@ const Register = () => {
 
   // =================== UI ===================
   return (
-    <div className="w-screen h-screen flex flex-row-reverse overflow-hidden">
-
+    <div
+      className="
+        w-screen h-screen
+        flex flex-col md:flex-row-reverse
+        items-center justify-center md:justify-start
+        overflow-hidden
+      "
+    >
       {/* RIGHT SIDE FORM */}
-      <div className="w-1/2 h-full flex items-center justify-center bg-white">
-        <div className="w-full flex items-center justify-center">
+      <div className="w-full md:w-1/2 h-auto md:h-full flex items-center justify-center bg-white py-10 md:py-0">
 
+        <div className="w-full flex items-center justify-center">
           <form
             onSubmit={handleSubmit}
-            className="bg-white rounded-2xl w-3/5 p-6 flex flex-col gap-6 shadow-[0px_5px_30px_rgba(0,0,0,0.5)]"
+            className="
+              bg-white rounded-2xl w-11/12 sm:w-3/4 md:w-3/5
+              p-6 flex flex-col gap-6
+              shadow-[0px_5px_30px_rgba(0,0,0,0.5)]
+            "
           >
-            <h1 className="text-2xl font-bold text-center">Register</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-center">
+              Register
+            </h1>
 
             {formError && (
               <p className="text-red-500 text-center">{formError}</p>
@@ -229,7 +235,7 @@ const Register = () => {
               <input
                 name="username"
                 onChange={handleChange}
-                className="w-full border-b outline-none"
+                className="w-full border-b outline-none pt-2 text-sm sm:text-base"
               />
             </div>
 
@@ -246,7 +252,7 @@ const Register = () => {
                 name="email"
                 type="email"
                 onChange={handleChange}
-                className="w-full border-b outline-none"
+                className="w-full border-b outline-none pt-2 text-sm sm:text-base"
               />
             </div>
 
@@ -265,8 +271,9 @@ const Register = () => {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   onChange={handleChange}
-                  className="w-full border-b outline-none pr-10"
+                  className="w-full border-b outline-none pr-10 pt-2 text-sm sm:text-base"
                 />
+
                 <span
                   onClick={() => setShowPassword((p) => !p)}
                   className="absolute right-1 bottom-0 text-xl cursor-pointer"
@@ -276,7 +283,7 @@ const Register = () => {
               </div>
             </div>
 
-            {/* Confirm */}
+            {/* Confirm Password */}
             <div className="group relative">
               <label
                 className={`absolute duration-300 font-semibold ${
@@ -291,8 +298,9 @@ const Register = () => {
                   type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   onChange={handleChange}
-                  className="w-full border-b outline-none pr-10"
+                  className="w-full border-b outline-none pr-10 pt-2 text-sm sm:text-base"
                 />
+
                 <span
                   onClick={() => setShowConfirmPassword((p) => !p)}
                   className="absolute right-1 bottom-0 text-xl cursor-pointer"
@@ -310,18 +318,19 @@ const Register = () => {
                 ref={fileInputRef}
                 accept="image/*"
                 onChange={handleFileSelect}
-                className="w-full border-b outline-none"
+                className="w-full border-b outline-none text-sm sm:text-base"
               />
             </div>
 
-            <button className="bg-black text-white rounded-lg py-2">
+            {/* Submit */}
+            <button className="bg-black text-white rounded-lg py-2 text-lg">
               {loading ? "Registering..." : "Register"}
             </button>
           </form>
 
-          {/* RIGHT IMAGE PANEL */}
+          {/* RIGHT IMAGE PANEL (HIDDEN ON MOBILE) */}
           <div
-            className={`transition-all duration-700 h-full flex flex-col items-center justify-center overflow-hidden ${imageWidthClass}`}
+            className={`transition-all duration-700 h-full hidden md:flex flex-col items-center justify-center overflow-hidden ${imageWidthClass}`}
           >
             {profilePhotoPreview && (
               <img
@@ -349,10 +358,10 @@ const Register = () => {
         </div>
       </div>
 
-      {/* LEFT SIDE — ALL 4 CONTAINERS + ANIMATIONS */}
-      <div className="w-1/2 h-full relative">
+      {/* LEFT ANIMATION (HIDDEN ON MOBILE) */}
+      <div className="hidden md:block w-1/2 h-full relative">
 
-        {/* FLOATING HEARTS */}
+        {/* Hearts */}
         {hearts.map((h) => (
           <div
             key={h.id}
@@ -363,7 +372,7 @@ const Register = () => {
           </div>
         ))}
 
-        {/* ===== CONTAINER 1 ===== */}
+        {/* Container 1 */}
         <div
           ref={(el) => el && containerRefs.current.push(el)}
           className="fixed bottom-0 left-0 w-[100px] h-[200px] bg-sky-400 flex gap-5"
@@ -378,16 +387,9 @@ const Register = () => {
               </div>
             </div>
           ))}
-
-          {blushVisible && (
-            <div className="absolute top-[60px] w-full flex justify-between px-5">
-              <div className="w-[14%] h-[20px] bg-red-400 blur-md rounded-full"></div>
-              <div className="w-[14%] h-[20px] bg-red-400 blur-md rounded-full"></div>
-            </div>
-          )}
         </div>
 
-        {/* ===== CONTAINER 2 ===== */}
+        {/* Container 2 */}
         <div
           ref={(el) => el && containerRefs.current.push(el)}
           className="fixed bottom-0 left-[100px] w-[250px] h-[150px] bg-yellow-300 rounded-t-[50px] flex justify-center gap-5"
@@ -402,16 +404,9 @@ const Register = () => {
               </div>
             </div>
           ))}
-
-          {blushVisible && (
-            <div className="absolute top-[60px] px-5 w-full flex justify-between">
-              <div className="w-[14%] h-[20px] bg-red-400 blur-md rounded-full"></div>
-              <div className="w-[14%] h-[20px] bg-red-400 blur-md rounded-full"></div>
-            </div>
-          )}
         </div>
 
-        {/* ===== CONTAINER 3 ===== */}
+        {/* Container 3 */}
         <div
           ref={(el) => el && containerRefs.current.push(el)}
           className="fixed bottom-0 left-[30px] w-[150px] h-[300px] bg-lime-400 rounded-t-[50px] -z-10 flex justify-center gap-5"
@@ -426,16 +421,9 @@ const Register = () => {
               </div>
             </div>
           ))}
-
-          {blushVisible && (
-            <div className="absolute top-[60px] px-5 w-full flex justify-between">
-              <div className="w-[14%] h-[20px] bg-red-400 blur-md rounded-full"></div>
-              <div className="w-[14%] h-[20px] bg-red-400 blur-md rounded-full"></div>
-            </div>
-          )}
         </div>
 
-        {/* ===== CONTAINER 4 ===== */}
+        {/* Container 4 */}
         <div
           ref={(el) => el && containerRefs.current.push(el)}
           className="fixed bottom-0 left-[150px] w-[150px] h-[250px] bg-red-300 rounded-t-[50px] -z-10 flex justify-center gap-5"
@@ -450,13 +438,6 @@ const Register = () => {
               </div>
             </div>
           ))}
-
-          {blushVisible && (
-            <div className="absolute top-[60px] px-5 w-full flex justify-between">
-              <div className="w-[14%] h-[20px] bg-red-400 blur-md rounded-full"></div>
-              <div className="w-[14%] h-[20px] bg-red-400 blur-md rounded-full"></div>
-            </div>
-          )}
         </div>
       </div>
 
@@ -505,11 +486,9 @@ const Register = () => {
                 </button>
               </div>
             </div>
-
           </div>
         </div>
       )}
-
     </div>
   );
 };

@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -38,6 +36,13 @@ const Login = () => {
 
       navigate("/home");
     } catch (err) {
+      console.error("Login dispatch error:", err);
+      // If axios response present, log the server response body for debugging
+      try {
+        console.error("Server response:", err?.response?.data ?? err?.payload ?? err);
+      } catch (e) {
+        console.error(e);
+      }
       const msg =
         err?.message || err?.response?.data?.message || "Invalid credentials.";
 
@@ -64,7 +69,7 @@ const Login = () => {
   const createHeart = useCallback(() => {
     const id = Date.now() + Math.random();
 
-    const left = Math.random() * (window.innerWidth);
+    const left = Math.random() * window.innerWidth;
     const top = window.innerHeight - 200;
 
     const fontSize = 20 + Math.random() * 40;
@@ -140,19 +145,30 @@ const Login = () => {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-row-reverse overflow-hidden relative">
-
+    <div
+      className="
+        w-screen h-screen 
+        flex flex-col md:flex-row-reverse 
+        items-center justify-center md:justify-start
+        overflow-hidden relative
+      "
+    >
       {/* RIGHT SIDE (FORM) */}
-      <div className="w-1/2 h-full flex items-center justify-center bg-white">
+      <div className="w-full md:w-1/2 h-auto md:h-full flex items-center justify-center bg-white py-10 md:py-0">
 
         <form
           onSubmit={(e) => {
             triggerLoginAnimation();
             handleLogin(e);
           }}
-          className="bg-white shadow-form rounded-2xl w-3/5 p-6 flex flex-col gap-6 shadow-[0px_5px_30px_1px_rgba(0,0,0,0.5)]"
+          className="bg-white shadow-form rounded-2xl 
+          w-11/12 sm:w-3/4 md:w-3/5 
+          p-6 flex flex-col gap-6 
+          shadow-[0px_5px_30px_1px_rgba(0,0,0,0.5)]"
         >
-          <h1 className="text-3xl font-bold text-center mb-2">Login</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-center mb-2">
+            Login
+          </h1>
 
           {error && <p className="text-red-600 text-center">{error}</p>}
 
@@ -171,7 +187,7 @@ const Login = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border-b outline-none pt-2"
+              className="w-full border-b outline-none pt-2 text-sm sm:text-base"
               required
             />
           </div>
@@ -192,11 +208,10 @@ const Login = () => {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full border-b outline-none pr-10 pt-2"
+                className="w-full border-b outline-none pr-10 pt-2 text-sm sm:text-base"
                 required
               />
 
-              {/* Eye icon */}
               <span
                 onClick={() => setShowPassword((p) => !p)}
                 className="absolute right-1 bottom-0 cursor-pointer text-xl"
@@ -216,7 +231,7 @@ const Login = () => {
           </button>
 
           {/* NAVIGATE */}
-          <p className="text-center mt-3">
+          <p className="text-center mt-3 text-sm sm:text-base">
             Don’t have an account?{" "}
             <span
               onClick={() => navigate("/register")}
@@ -229,7 +244,7 @@ const Login = () => {
       </div>
 
       {/* LEFT SIDE ANIMATED EYES */}
-      <div className="w-1/2 h-full relative">
+      <div className="w-full md:w-1/2 h-[300px] md:h-full relative overflow-hidden hidden md:flex">
 
         {/* Hearts flying */}
         {hearts.map((h) => (
@@ -241,8 +256,6 @@ const Login = () => {
             {h.emoji}
           </div>
         ))}
-
-        {/* --- CONTAINERS + EYES (Same as earlier) --- */}
 
         {/* Container 1 */}
         <div
@@ -345,4 +358,3 @@ const Login = () => {
 };
 
 export default Login;
-

@@ -1,7 +1,8 @@
   import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
   import axios from "axios";
 
-const BASE_URL = "http://192.168.0.26:5000";
+// BASE_URL should point to the host only — endpoints include the `/api` prefix below
+const BASE_URL = "https://robo-1-qqhu.onrender.com";
 
   const initialState = {
     user: [],

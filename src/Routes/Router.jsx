@@ -1,7 +1,6 @@
    
 import Login from '../Components/Login/Login';
 import Register from '../Components/Register/Register';
-import Preview from '../Components/Preview/Preview';
 import { createBrowserRouter } from 'react-router-dom';
 import Home from '../Components/Users/Home/Home';
 import AddFriends from '../Components/Users/Home/AddFriends';
@@ -28,7 +27,7 @@ let routes= createBrowserRouter([
     element:<AddFriends/>
     },
     {
-    path:"/Profilepage",
+    path:"/profile",
     element:<ProfilePage/>
     },
    
