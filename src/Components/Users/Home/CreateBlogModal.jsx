@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FiX } from "react-icons/fi";
 
+
 export default function CreateBlogModal({ open, onClose, onPost }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
