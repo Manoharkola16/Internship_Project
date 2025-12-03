@@ -12,40 +12,24 @@ export default function CreateBlogModal({ open, onClose, onPost }) {
     if (!title.trim() || !content.trim()) return;
 
     onPost(title, content);
-
-    // Reset fields after posting
     setTitle("");
     setContent("");
   };
 
   return (
     <>
-      {/* Background Blur */}
-      <div
-        className="fixed inset-0 bg-black/40 z-40"
-        onClick={onClose}
-      />
+      <div className="fixed inset-0 bg-black/40 z-40" onClick={onClose} />
 
-      {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
         <div className="bg-white rounded-xl w-full max-w-lg shadow-xl p-6 space-y-4">
-
-          {/* Header */}
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-900">Create Blog</h3>
-
-            <button
-              onClick={onClose}
-              className="p-1 rounded-full hover:bg-gray-100"
-            >
-              <FiX size={20} />
+            <button onClick={onClose} className="p-1 rounded-full hover:bg-gray-100">
+              <FiX />
             </button>
           </div>
 
-          {/* Inputs */}
           <div className="space-y-3">
-
-            {/* Title */}
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">
                 Title
@@ -59,7 +43,6 @@ export default function CreateBlogModal({ open, onClose, onPost }) {
               />
             </div>
 
-            {/* Content */}
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">
                 Content
@@ -72,12 +55,9 @@ export default function CreateBlogModal({ open, onClose, onPost }) {
                 onChange={(e) => setContent(e.target.value)}
               />
             </div>
-
           </div>
 
-          {/* Buttons */}
           <div className="flex justify-end gap-2 pt-2">
-
             <button
               onClick={onClose}
               className="px-4 py-2 text-sm rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50"
@@ -91,9 +71,7 @@ export default function CreateBlogModal({ open, onClose, onPost }) {
             >
               Post
             </button>
-
           </div>
-
         </div>
       </div>
     </>

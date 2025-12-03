@@ -25,13 +25,15 @@
 
 
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./authSlice";
+import userReducer, { authReducer } from "./slice";
 import blogReducer from "./BlogSlice";
 
 export const store = configureStore({
   reducer: {
+    user: userReducer,
     auth: authReducer,
-    blogs: blogReducer
+    blogs: blogReducer,
+
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false })
