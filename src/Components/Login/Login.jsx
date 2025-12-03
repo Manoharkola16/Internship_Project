@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -15,7 +17,10 @@ const Login = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.user);
+  // const { loading } = useSelector((state) => state.user);
+  const authState = useSelector((state) => state.auth) || {};
+  const loading = authState.loading || false;
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -358,3 +363,4 @@ const Login = () => {
 };
 
 export default Login;
+

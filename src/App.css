@@ -25,7 +25,9 @@
 animation: floatup 1s linear forwards;
 } */
 
-
+::-webkit-scrollbar{
+  display: none;
+}
 @theme {
   --animate-floatup: floatup 1s linear forwards;
 @keyframes floatup {

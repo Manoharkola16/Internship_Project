@@ -24,11 +24,14 @@ const MouseTrail = () => {
 
     const handleClick = (e) => {
       const elem = document.elementFromPoint(e.clientX, e.clientY);
-      if (elem) elem.click();
+
+      // ✅ SAFETY FIX — prevents crash
+      if (elem && typeof elem.click === "function") {
+        elem.click();
+      }
     };
 
     const update = () => {
-      // More delay by using different easing speeds
       pos.firstX += (pos.targetX - pos.firstX) * 0.1;
       pos.firstY += (pos.targetY - pos.firstY) * 0.1;
 

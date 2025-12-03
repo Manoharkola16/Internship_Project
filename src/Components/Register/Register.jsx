@@ -1,4 +1,6 @@
 
+
+
 import React, {
   useCallback,
   useEffect,
@@ -55,7 +57,10 @@ const getCroppedImg = (imageSrc, pixelCrop) => {
 const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.user || {});
+  // const { loading } = useSelector((state) => state.user || {});
+  const authState = useSelector((state) => state.auth) || {};
+  const loading = authState.loading || false;
+
 
   // FORM FIELDS
   const [formData, setFormData] = useState({
@@ -494,3 +499,4 @@ const Register = () => {
 };
 
 export default Register;
+
